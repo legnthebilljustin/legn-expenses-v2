@@ -3,5 +3,5 @@ export function convertToCurrency(amount: number):string {
         return "??";
     }
 
-    return `${amount.toLocaleString("en-US", { minimumFractionDigits: 2 })} \u20B1 `;
+    return `\u20B1 ${amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}  `;
 }
