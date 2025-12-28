@@ -1,7 +1,9 @@
-import { siteConfig } from "@/config/site";
 import { Button } from "@heroui/button";
 import { NavLink } from "react-router-dom";
+
 import { ThemeSwitch } from "./theme-switch";
+
+import { siteConfig } from "@/config/site";
 
 
 export const Sidebar = () => {
@@ -20,14 +22,14 @@ export const Sidebar = () => {
                         {siteConfig.navItems.map((item) => (
                             <li key={item.label}>
                                 <NavLink
-                                    to={item.href}
                                     className={({ isActive }) => `
                                         flex items-center px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300
                                         ${isActive 
-                                            ? "bg-[#5D5FEF]/20 text-[#6a6cfc] shadow-lg shadow-indigo-100" 
-                                            : "text-slate-600 hover:bg-indigo-100 hover:text-indigo-600"
-                                        }
+                                ? "bg-[#5D5FEF]/20 text-[#6a6cfc] shadow-lg shadow-indigo-100" 
+                                : "text-slate-600 hover:bg-indigo-100 hover:text-indigo-600"
+                            }
                                     `}
+                                    to={item.href}
                                 >
                                     {item.label}
                                 </NavLink>
@@ -39,9 +41,9 @@ export const Sidebar = () => {
 
                 <div className="mt-auto pt-8 border-t border-indigo-100 flex items-end justify-between">
                     <Button 
-                        variant="flat"
-                        size="sm"
                         className="text-indigo-500 hover:bg-indigo-100 w-full"
+                        size="sm"
+                        variant="flat"
                     >
                         Logout
                     </Button>

@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 
+import Expenses from "./pages/Expenses";
+
 import IndexPage from "@/pages/index";
 import Dashboard from "@/pages/Dashboard";
-import Expenses from "./pages/Expenses";
 
 function App() {
     return (

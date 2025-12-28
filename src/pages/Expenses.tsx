@@ -9,5 +9,5 @@ export default function Expenses() {
                 </div>
             </section>
         </DefaultLayout>
-    )
+    );
 }

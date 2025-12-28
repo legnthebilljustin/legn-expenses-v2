@@ -1,6 +1,7 @@
+import { Card } from "@heroui/react";
+
 import CurrencyText from "@/components/CurrencyText";
 import SubtitleText from "@/components/SubtitleText";
-import { Card } from "@heroui/react";
 
 export default function DashboardCard() {
     return (
@@ -12,9 +13,7 @@ export default function DashboardCard() {
                 <div>|</div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
-                <div className="lg:col-span-2">
-                    
-                </div>
+                <div className="lg:col-span-2" />
                 <div className="text-right">
                     <SubtitleText text="Spent" />
                     <CurrencyText amount={29093.00} />
