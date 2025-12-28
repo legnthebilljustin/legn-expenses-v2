@@ -1,10 +1,7 @@
-import { Button } from "@heroui/button";
+
 import { NavLink } from "react-router-dom";
-
-import { ThemeSwitch } from "./theme-switch";
-
 import { siteConfig } from "@/config/site";
-
+import { LogoutIcon } from "@/assets/icons";
 
 export const Sidebar = () => {
 
@@ -31,22 +28,19 @@ export const Sidebar = () => {
                                     `}
                                     to={item.href}
                                 >
-                                    {item.label}
+                                    {item.icon &&  <item.icon /> }
+                                    <span className="ml-4">{item.label}</span>
                                 </NavLink>
                             </li>
                         ))}
                     </ul>
-                    <ul><ThemeSwitch /></ul>
                 </nav>
 
                 <div className="mt-auto pt-8 border-t border-indigo-100 flex items-end justify-between">
-                    <Button 
-                        className="text-indigo-500 hover:bg-indigo-100 w-full"
-                        size="sm"
-                        variant="flat"
-                    >
-                        Logout
-                    </Button>
+                    <div className="flex px-6 text-danger">
+                        <LogoutIcon />
+                        <span className="ml-4 text-sm font-medium text-danger">Logout</span>
+                    </div>
                 </div>
             </div>
         </aside>

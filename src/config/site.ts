@@ -1,24 +1,27 @@
 export type SiteConfig = typeof siteConfig;
-
+import { ClipboardIcon, CreditCardIcon, DashboardIcon, HomeIcon } from "@/assets/icons";
 export const siteConfig = {
     name: "Legn",
-    description: "Make beautiful websites regardless of your design experience.",
     navItems: [
         {
             label: "Home",
             href: "/",
+            icon: HomeIcon
         },
         {
             label: "Dashboard",
             href: "/dashboard",
+            icon: DashboardIcon
         },
         {
             label: "Expenses",
             href: "/expenses",
+            icon: ClipboardIcon
         },
         {
             label: "Cards",
             href: "/cards",
+            icon: CreditCardIcon
         },
     ],
     navMenuItems: [
