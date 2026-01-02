@@ -7,6 +7,7 @@ import { BarChartIcon, CreditCardIcon, ReceiptIcon, WalletIcon } from "@/assets/
 import { convertToCurrency } from "@/utils/currency";
 import HeadingText from "@/components/HeadingText";
 import RecentExpensesTable from "@/features/RecentExpensesTable";
+import CurrentBalance from "@/features/CurrentBalance";
 
 export default function Dashboard() {
     return (
@@ -15,9 +16,7 @@ export default function Dashboard() {
                 <div className="">
                     <h1 className="text-3xl font-bold mb-2">Hello, Bill</h1>
                     <SubtitleText text="Take a look at your current month's balance." />
-                    <div className="text-center my-40">
-                        <h1 className="text-8xl font-black">G</h1>
-                    </div>
+                    <CurrentBalance />
                     <SpendCategoryCard />
                 </div>
                 <div className="lg:col-span-2">

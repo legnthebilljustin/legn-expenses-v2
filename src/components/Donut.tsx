@@ -16,15 +16,19 @@ interface Props {
     subtitle: string
     showCenterText?: boolean
     centerTextData?: string | number
+    showLegend?: boolean
+    donutSize?: number
 }
 
-export default function CustomDonut({ data, subtitle, centerTextData, showCenterText }: Props) {
+export default function CustomDonut({ data, subtitle, centerTextData, showCenterText, donutSize = 220, showLegend = true }: Props) {
     const [tooltip, setTooltip] = useState<TooltipState | null>(null);
-    const size = 220;
+    const size = donutSize;
     const strokeWidth = 20;
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
-    let cumulativePercent = 0;
+
+    const total = data.reduce((sum, d) => sum + d.value, 0);
+    let cumulativeValue = 0;
 	
     if (!Array.isArray(data)) {
         return <div className="text-center text-default-500 text-sm">Cannot display chart. Data format mismatch.</div>;
@@ -44,16 +48,17 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
                     </div>
                 )}
                 <svg height={size} viewBox={`0 0 ${size} ${size}`} width={size}>
-                    {data.map((segment: DonutSegment, index) => {
-                        let segmentLength =
+                    {data.map((segment, index) => {
+                        const fraction =
                             index === data.length - 1
-                                ? circumference - (cumulativePercent / 100) * circumference
-                                : (segment.value / 100) * circumference;
+                                ? (total - cumulativeValue) / total
+                                : segment.value / total;
 
+                        const segmentLength = fraction * circumference;
                         const dashArray = `${segmentLength} ${circumference - segmentLength}`;
-                        const dashOffset = circumference - (cumulativePercent / 100) * circumference;
+                        const dashOffset = circumference - (cumulativeValue / total) * circumference;
 
-                        cumulativePercent += segment.value;
+                        cumulativeValue += segment.value;
 
                         return (
                             <circle
@@ -67,10 +72,7 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
                                 strokeDashoffset={dashOffset}
                                 strokeLinecap="round"
                                 strokeWidth={strokeWidth}
-                                style={{
-                                    cursor: "pointer",
-                                    transition: "opacity 0.2s ease",
-                                }}
+                                style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
                                 transform={`rotate(-90 ${size / 2} ${size / 2})`}
                                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
                                 onMouseLeave={(e) => {
@@ -96,17 +98,18 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
                     </div>
                 )}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-6 mt-4 justify-center w-full">
-                {data.map((item) => (
-                    <div key={item.label} className="flex items-center space-x-2">
-                        <div className={"w-1 h-2 rounded-full"} style={{ backgroundColor: item.color }} />
-                        <span className="text-xs whitespace-nowrap tracking-tight">
-                            {item.label}
-                        </span>
-                    </div>
-                ))}
-            </div>
+            { showLegend && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-6 mt-4 justify-center w-full">
+                    {data.map((item) => (
+                        <div key={item.label} className="flex items-center space-x-2">
+                            <div className={"w-1 h-2 rounded-full"} style={{ backgroundColor: item.color }} />
+                            <span className="text-xs whitespace-nowrap tracking-tight">
+                                {item.label}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-		
     );
 }
