@@ -1,13 +1,13 @@
 import DefaultLayout from "@/layouts/default";
-import DashboardCard from "@/features/DashboardCard";
+import DashboardCard from "@/features/dashboard/DashboardCard";
 import SubtitleText from "@/components/SubtitleText";
-import SpendCategoryCard from "@/features/SpendCategoryCard";
-import MetricsCard from "@/features/MetricsCard";
+import SpendCategoryCard from "@/features/dashboard/SpendCategoryCard";
+import MetricsCard from "@/features/dashboard/MetricsCard";
 import { BarChartIcon, CreditCardIcon, ReceiptIcon, WalletIcon } from "@/assets/icons";
 import { convertToCurrency } from "@/utils/currency";
 import HeadingText from "@/components/HeadingText";
-import RecentExpensesTable from "@/features/RecentExpensesTable";
-import CurrentBalance from "@/features/CurrentBalance";
+import RecentExpensesTable from "@/features/dashboard/RecentExpensesTable";
+import CurrentBalance from "@/features/dashboard/CurrentBalance";
 
 export default function Dashboard() {
     return (
