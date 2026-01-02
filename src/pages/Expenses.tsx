@@ -1,13 +1,25 @@
+import { Button } from "@heroui/button";
+
+import { AddIcon } from "@/assets/icons";
+import CategoryList from "@/features/expenses/CategoryList";
+import ExpensesTable from "@/features/expenses/ExpensesTable";
 import DefaultLayout from "@/layouts/default";
 
 export default function Expenses() {
     return (
         <DefaultLayout>
-            <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-                <div className="inline-block max-w-lg text-center justify-center">
-                    <h1 className="text-4xl font-bold">Expenses</h1>
+            <div className="text-right">
+                <Button color="primary" startContent={<AddIcon />}>Create Expenses</Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="col-span-5 xl:col-span-4">
+                    <ExpensesTable />
+                    <ExpensesTable />
                 </div>
-            </section>
+                <div className="hidden xl:block pt-4">
+                    <CategoryList />
+                </div>
+            </div>
         </DefaultLayout>
     );
 }
