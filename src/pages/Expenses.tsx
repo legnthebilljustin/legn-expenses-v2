@@ -1,9 +1,9 @@
 import { Button } from "@heroui/button";
 
-import { AddIcon } from "@/assets/icons";
 import CategoryList from "@/features/expenses/CategoryList";
 import ExpensesTable from "@/features/expenses/ExpensesTable";
 import DefaultLayout from "@/layouts/default";
+import { AddIcon } from "@/assets/icons";
 
 export default function Expenses() {
     return (
