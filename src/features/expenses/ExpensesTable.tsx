@@ -9,7 +9,7 @@ export default function ExpensesTable() {
     return (
         <>
             <div className="text-sm font-bold tracking-tight mb-2 mt-4 text-slate-400">Thu, January 01 2026</div>
-            <Table>
+            <Table aria-label="Expenses table">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

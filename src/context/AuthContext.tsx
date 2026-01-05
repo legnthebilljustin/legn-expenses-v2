@@ -47,8 +47,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setICheckingCredentials(false);
         });
 
-        return unsubsribe();
-    });
+        return unsubsribe;
+    }, []);
 
     const value: AuthContextType = {
         currentUser,
