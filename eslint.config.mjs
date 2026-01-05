@@ -92,7 +92,7 @@ export default defineConfig([
                 },
             ],
             "react/jsx-sort-props": [
-                "warn",
+                "error",
                 {
                     callbacksLast: true,
                     shorthandFirst: true,
