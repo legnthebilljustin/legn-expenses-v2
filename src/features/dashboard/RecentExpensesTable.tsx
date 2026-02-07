@@ -65,7 +65,7 @@ export const expenses = [
 ];
 export default function RecentExpensesTable() {
     return (
-        <Table>
+        <Table aria-label="Recent expenses">
             <TableHeader columns={columns}>
                 {(column) => (
                     <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

@@ -25,7 +25,7 @@ api.interceptors.request.use(async(config) => {
 }, (error) => Promise.reject(error));
 
 api.interceptors.response.use(
-    (response) => response.data,
+    (response) => response,
     async(error) => {
         const status = error.response?.status;
 
