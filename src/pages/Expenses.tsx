@@ -1,9 +1,9 @@
 import { Button } from "@heroui/button";
 
 import CategoryList from "@/features/expenses/CategoryList";
-import ExpensesTable from "@/features/expenses/ExpensesTable";
 import DefaultLayout from "@/layouts/default";
 import { AddIcon } from "@/assets/icons";
+import ExpensesList from "@/features/expenses/ExpensesList";
 
 export default function Expenses() {
     return (
@@ -13,8 +13,7 @@ export default function Expenses() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="col-span-5 xl:col-span-4">
-                    <ExpensesTable />
-                    <ExpensesTable />
+                    <ExpensesList />
                 </div>
                 <div className="hidden xl:block pt-4">
                     <CategoryList />
