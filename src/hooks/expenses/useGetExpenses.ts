@@ -16,7 +16,7 @@ export default function useGetExpenses() {
     } = useQuery({
         queryKey: ["expenses", paginationKey],
         queryFn: async () => {
-            const response = await api.get(`/v1/expenses?paginationKey=${encodeURIComponent(JSON.stringify(paginationKey))}`);
+            const response = await api.get("/v1/expenses?paginationKey=null");
 
             if (!Array.isArray(response.data.expenses)) {
                 throw new AppError(500, "Invalid expenses data structure. Expected an array.");

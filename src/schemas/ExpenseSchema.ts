@@ -13,6 +13,11 @@ export const ExpenseItemSchema = z.object({
     itemName: z.string(),
     price: z.number(),
     purchaseDate: z.string(),
+    spendCategoryId: z.string(),
+    spendCategoryDetails: z.object({
+        name: z.string(),
+        color: z.string()
+    })
 });
 
 export const GroupedExpensesListSchema = z.object({
