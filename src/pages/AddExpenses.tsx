@@ -6,17 +6,11 @@ import DefaultLayout from "@/layouts/default";
 import useGetCategories from "@/hooks/others/useGetCategories";
 import useExpensesFormData from "@/hooks/expenses/useExpensesFormData";
 import useFormSubmit from "@/hooks/expenses/useFormSubmit";
-
-const payment = [
-    { key: "cash", name: "Cash" },
-    { key: "bpi", name: "BPI Rewards" },
-    { key: "ub", name: "UB Rewards Platinum" },
-    { key: "chinabank", name: "Chinabank Platinum" },
-];
+import useGetCards from "@/hooks/cards/useGetCards";
 
 export default function AddExpenses() {
     const { spendCategories, isLoading } = useGetCategories();
-
+    const { paymentMethods, isPaymentMethodsLoading } = useGetCards()
     const {
         formData,
         purchaseDate,
@@ -24,7 +18,8 @@ export default function AddExpenses() {
         removeItem,
         handlePurchaseDateChange,
         handleInputChange,
-        handleSpendCategoryChange
+        handleSpendCategoryChange,
+        handlePaymentMethodChange
     } = useExpensesFormData();
 
     const { submitForm } = useFormSubmit();
@@ -35,7 +30,7 @@ export default function AddExpenses() {
         submitForm(purchaseDate, formData);
     };
 
-    if (isLoading) {
+    if (isLoading || isPaymentMethodsLoading) {
         return (
             <DefaultLayout>
                 <div className="text-center">
@@ -63,9 +58,10 @@ export default function AddExpenses() {
                     categories={spendCategories}
                     handleInputChange={handleInputChange}
                     item={item}
-                    paymentMethods={payment}
+                    paymentMethods={paymentMethods}
                     removeItem={removeItem}
                     handleSpendCategoryChange={handleSpendCategoryChange}
+                    handlePaymentMethodChange={handlePaymentMethodChange}
                 />
             ))}
             <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">

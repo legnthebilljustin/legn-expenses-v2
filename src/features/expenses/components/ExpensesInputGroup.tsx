@@ -1,24 +1,24 @@
 import { Input } from "@heroui/input";
 import { Button, Select, SelectItem } from "@heroui/react";
 import React, { useCallback } from "react";
-
 import { DeleteIcon } from "@/assets/icons";
 import { SpendCategory } from "@/schemas/CategoriesSchema";
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
 import { CategoryDetails } from "@/hooks/expenses/useExpensesFormData";
 
 interface Props {
-    paymentMethods: any[]
+    paymentMethods: { id: string, name: string, color: string }[]
     categories: SpendCategory[]
     item: ExpenseItem
     removeItem: (itemId: string) => void
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void
     handleSpendCategoryChange: (itemId: string, categoryId: string, details: CategoryDetails) => void
+    handlePaymentMethodChange: (itemId: string, cardId: string, cardDetails: { name: string, color: string }) => void
 }
 
 function ExpensesInputGroup({ 
     categories, paymentMethods, item, removeItem, handleInputChange,
-    handleSpendCategoryChange
+    handleSpendCategoryChange, handlePaymentMethodChange
 }: Props) {
     const referenceId = item.id;
 
@@ -37,6 +37,18 @@ function ExpensesInputGroup({
             color: categoryDetails.color
         });
     }, [categories, handleSpendCategoryChange, referenceId]);
+
+    const handlePMChange = useCallback((event: React.ChangeEvent<any>) => {
+        const cardId = event.target.value;
+        const cardDetails = paymentMethods.find(card => card.id === cardId);
+
+        if (!cardDetails) return;
+
+        handlePaymentMethodChange(referenceId, cardId, {
+            name: cardDetails.name,
+            color: cardDetails.color
+        });
+    }, [paymentMethods, handlePaymentMethodChange, referenceId]);
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-[1400px] mt-3">
@@ -71,11 +83,12 @@ function ExpensesInputGroup({
                     </SelectItem>
                 ))}
             </Select>
-            <Select isRequired defaultSelectedKeys={["cash"]} label="Payment Method"
+            <Select isRequired label="Payment Method"
                 placeholder="Select payment" selectionMode="single"
+                onChange={(event) => handlePMChange(event)}
             >
                 {paymentMethods.map((item) => (
-                    <SelectItem key={item.key} textValue={item.name}>{item.name}</SelectItem>
+                    <SelectItem key={item.id} textValue={item.name}>{item.name}</SelectItem>
                 ))}
             </Select>
             <div className="text-center col-span-2 md:col-span-1 md:text-left">

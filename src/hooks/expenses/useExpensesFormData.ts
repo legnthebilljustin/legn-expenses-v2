@@ -85,6 +85,24 @@ export default function useExpensesFormData() {
         );
     }, []);
 
+    const handlePaymentMethodChange = useCallback((
+        id: string,
+        cardId: string,
+        cardDetails: { name: string, color: string }
+    ) => {
+        setFormData(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? {
+                        ...item,
+                        paymentMethodId: cardId,
+                        paymentMethodDetails: cardDetails
+                    }
+                    : item
+            )
+        );
+    }, []);
+
     return {
         formData,
         purchaseDate,
@@ -92,6 +110,7 @@ export default function useExpensesFormData() {
         removeItem,
         handlePurchaseDateChange,
         handleInputChange,
-        handleSpendCategoryChange
+        handleSpendCategoryChange,
+        handlePaymentMethodChange
     };
 }
