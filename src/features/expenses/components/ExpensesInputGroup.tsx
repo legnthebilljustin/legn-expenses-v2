@@ -5,6 +5,7 @@ import React, { useCallback } from "react";
 import { DeleteIcon } from "@/assets/icons";
 import { SpendCategory } from "@/schemas/CategoriesSchema";
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
+import { CategoryDetails } from "@/hooks/expenses/useExpensesFormData";
 
 interface Props {
     paymentMethods: any[]
@@ -12,15 +13,30 @@ interface Props {
     item: ExpenseItem
     removeItem: (itemId: string) => void
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void
+    handleSpendCategoryChange: (itemId: string, categoryId: string, details: CategoryDetails) => void
 }
 
 function ExpensesInputGroup({ 
-    categories, paymentMethods, item, removeItem, handleInputChange
+    categories, paymentMethods, item, removeItem, handleInputChange,
+    handleSpendCategoryChange
 }: Props) {
     const referenceId = item.id;
 
     // this is just to prevent creating a new function on every render, making this a stable reference
     const handleRemove = useCallback(() => removeItem(item.id), [removeItem, item.id]);
+    
+    const handleCategoryChange = useCallback((event: React.ChangeEvent<any>) => {
+        
+        const categoryId = event.target.value;
+        const categoryDetails = categories.find(category => category.id === categoryId);
+
+        if (!categoryDetails) return;
+
+        handleSpendCategoryChange(referenceId, categoryId, {
+            name: categoryDetails.name,
+            color: categoryDetails.color
+        });
+    }, [categories, handleSpendCategoryChange, referenceId]);
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-[1400px] mt-3">
@@ -45,10 +61,13 @@ function ExpensesInputGroup({
             />
             <Select isRequired label="Category" placeholder="Select category"
                 selectionMode="single"
+                onChange={(event) => handleCategoryChange(event)}
             >
-                {categories.map((item) => (
-                    <SelectItem key={item.id} textValue={item.id}>
-                        {item.name}
+                {categories.map((category) => (
+                    <SelectItem key={category.id} 
+                        textValue={category.name}
+                    >
+                        {category.name}
                     </SelectItem>
                 ))}
             </Select>

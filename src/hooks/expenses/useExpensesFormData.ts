@@ -1,8 +1,12 @@
 import { addToast, DateValue } from "@heroui/react";
 import { useCallback, useState } from "react";
-
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
 import { isACalendarDate } from "@/utils/date";
+
+export interface CategoryDetails {
+    name: string;
+    color: string;
+}
 
 export default function useExpensesFormData() {
     const [purchaseDate, setPurchaseDate] = useState<DateValue | null>(null);
@@ -63,12 +67,31 @@ export default function useExpensesFormData() {
         );
     }, []);
 
+    const handleSpendCategoryChange = useCallback((
+        id: string, 
+        categoryId: string, 
+        categoryDetails: CategoryDetails
+    ) => {
+        setFormData(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? {
+                        ...item,
+                        spendCategoryId: categoryId,
+                        spendCategoryDetails: categoryDetails
+                    }
+                    : item
+            )
+        );
+    }, []);
+
     return {
         formData,
         purchaseDate,
         addItem,
         removeItem,
         handlePurchaseDateChange,
-        handleInputChange
+        handleInputChange,
+        handleSpendCategoryChange
     };
 }

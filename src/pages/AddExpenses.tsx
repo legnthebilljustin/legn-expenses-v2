@@ -23,7 +23,8 @@ export default function AddExpenses() {
         addItem,
         removeItem,
         handlePurchaseDateChange,
-        handleInputChange
+        handleInputChange,
+        handleSpendCategoryChange
     } = useExpensesFormData();
 
     const { submitForm } = useFormSubmit();
@@ -64,6 +65,7 @@ export default function AddExpenses() {
                     item={item}
                     paymentMethods={payment}
                     removeItem={removeItem}
+                    handleSpendCategoryChange={handleSpendCategoryChange}
                 />
             ))}
             <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
