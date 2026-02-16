@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { addToast } from "@heroui/react";
 
 import api from "@/config/axiosInstance";
 import { validateFetchedPaymentMethod } from "@/validators/cards-validators";
-import { addToast } from "@heroui/react";
 import AppError from "@/utils/errorService";
 
 export default function useGetCards() {

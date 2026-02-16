@@ -1,4 +1,5 @@
 import { Button, DatePicker, Spinner } from "@heroui/react";
+
 import { AddIcon, SendIcon } from "@/assets/icons";
 import ExpensesInputGroup from "@/features/expenses/components/ExpensesInputGroup";
 import DefaultLayout from "@/layouts/default";
@@ -65,12 +66,12 @@ export default function AddExpenses() {
             ))}
             {(!didPaymentMethodsFetchFAil && !didSpendCategoriesFetchFail) && (
                 <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
-                    <Button className="mx-1" color="secondary" size="sm" startContent={<AddIcon />}
-                        onPress={addItem} 
-                        isDisabled={purchaseDate === null}
+                    <Button className="mx-1" color="secondary" isDisabled={purchaseDate === null} size="sm"
+                        startContent={<AddIcon />} 
+                        onPress={addItem}
                     >Add New Line</Button>
-                    <Button className="mx-1" color="primary" size="sm"
-                        isDisabled={purchaseDate === null}
+                    <Button className="mx-1" color="primary" isDisabled={purchaseDate === null}
+                        size="sm"
                         startContent={<SendIcon />} 
                         onPress={handleSubmit}
                     >Submit Expenses</Button>
