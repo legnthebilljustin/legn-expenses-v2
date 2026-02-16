@@ -1,5 +1,4 @@
 import { Button, DatePicker, Spinner } from "@heroui/react";
-
 import { AddIcon, SendIcon } from "@/assets/icons";
 import ExpensesInputGroup from "@/features/expenses/components/ExpensesInputGroup";
 import DefaultLayout from "@/layouts/default";
@@ -9,8 +8,8 @@ import useFormSubmit from "@/hooks/expenses/useFormSubmit";
 import useGetCards from "@/hooks/cards/useGetCards";
 
 export default function AddExpenses() {
-    const { spendCategories, isLoading } = useGetCategories();
-    const { paymentMethods, isPaymentMethodsLoading } = useGetCards()
+    const { spendCategories, isLoading, didSpendCategoriesFetchFail } = useGetCategories();
+    const { paymentMethods, isPaymentMethodsLoading, didPaymentMethodsFetchFAil } = useGetCards();
     const {
         formData,
         purchaseDate,
@@ -57,20 +56,27 @@ export default function AddExpenses() {
                 <ExpensesInputGroup key={item.id}
                     categories={spendCategories}
                     handleInputChange={handleInputChange}
+                    handlePaymentMethodChange={handlePaymentMethodChange}
+                    handleSpendCategoryChange={handleSpendCategoryChange}
                     item={item}
                     paymentMethods={paymentMethods}
                     removeItem={removeItem}
-                    handleSpendCategoryChange={handleSpendCategoryChange}
-                    handlePaymentMethodChange={handlePaymentMethodChange}
                 />
             ))}
-            <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
-                <Button className="mx-1" color="secondary" size="sm" startContent={<AddIcon />}
-                    onPress={addItem} 
-                    // isDisabled={purchaseDate === null}
-                >Add New Line</Button>
-                <Button className="mx-1" color="primary" size="sm" startContent={<SendIcon />} onPress={handleSubmit}>Submit Expenses</Button>
-            </div>
+            {(!didPaymentMethodsFetchFAil && !didSpendCategoriesFetchFail) && (
+                <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
+                    <Button className="mx-1" color="secondary" size="sm" startContent={<AddIcon />}
+                        onPress={addItem} 
+                        isDisabled={purchaseDate === null}
+                    >Add New Line</Button>
+                    <Button className="mx-1" color="primary" size="sm"
+                        isDisabled={purchaseDate === null}
+                        startContent={<SendIcon />} 
+                        onPress={handleSubmit}
+                    >Submit Expenses</Button>
+                </div>
+            )}
+            
         </DefaultLayout>
     );
 }
