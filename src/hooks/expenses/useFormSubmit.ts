@@ -1,19 +1,54 @@
-import { DateValue } from "@heroui/react";
+import { addToast } from "@heroui/react";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
+import api from "@/config/axiosInstance";
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
+import { AppErrorHandler } from "@/utils/errorService";
 
 export default function useFormSubmit() {
-    const submitForm = (purchaseDate: DateValue, formData: ExpenseItem[]) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const submitForm = async (purchaseDate: string, formData: ExpenseItem[]) => {
         if (!purchaseDate || !Array.isArray(formData) || formData.length === 0) {
             return;
         }
+        setIsSubmitting(true);
 
-        // const { year, month, day } = purchaseDate;
+        try {
+            await mutation.mutateAsync({ expenses: formData, purchaseDate });
 
-        // const parsedDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            addToast({
+                title: "Expenses submitted successfully!",
+                color: "success",
+                timeout: 3000
+            });
+
+            return true;
+        } catch (error) {
+            const { message } = AppErrorHandler(error);
+
+            addToast({
+                title: "Failed to submit expenses.",
+                description: message,
+                color: "danger",
+                timeout: 5000
+            });
+
+            throw error;
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
+    const mutation = useMutation({
+        mutationFn: async({ expenses, purchaseDate }: { expenses: ExpenseItem[], purchaseDate: string}) => {
+            return await api.post("/v1/expenses", { purchaseDate, expenses});
+        }
+    });
+
     return {
-        submitForm
+        submitForm,
+        isSubmitting
     };
 }   

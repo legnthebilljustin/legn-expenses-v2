@@ -6,17 +6,11 @@ import DefaultLayout from "@/layouts/default";
 import useGetCategories from "@/hooks/others/useGetCategories";
 import useExpensesFormData from "@/hooks/expenses/useExpensesFormData";
 import useFormSubmit from "@/hooks/expenses/useFormSubmit";
-
-const payment = [
-    { key: "cash", name: "Cash" },
-    { key: "bpi", name: "BPI Rewards" },
-    { key: "ub", name: "UB Rewards Platinum" },
-    { key: "chinabank", name: "Chinabank Platinum" },
-];
+import useGetCards from "@/hooks/cards/useGetCards";
 
 export default function AddExpenses() {
-    const { spendCategories, isLoading } = useGetCategories();
-
+    const { spendCategories, isLoading, didSpendCategoriesFetchFail } = useGetCategories();
+    const { paymentMethods, isPaymentMethodsLoading, didPaymentMethodsFetchFAil } = useGetCards();
     const {
         formData,
         purchaseDate,
@@ -24,18 +18,24 @@ export default function AddExpenses() {
         removeItem,
         handlePurchaseDateChange,
         handleInputChange,
-        handleSpendCategoryChange
+        handleSpendCategoryChange,
+        handlePaymentMethodChange,
+        resetFields
     } = useExpensesFormData();
 
-    const { submitForm } = useFormSubmit();
+    const { submitForm, isSubmitting } = useFormSubmit();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (purchaseDate === null) return;
 
-        submitForm(purchaseDate, formData);
+        const result = await submitForm(purchaseDate, formData);
+
+        if (result) {
+            resetFields();
+        }
     };
 
-    if (isLoading) {
+    if (isLoading || isPaymentMethodsLoading) {
         return (
             <DefaultLayout>
                 <div className="text-center">
@@ -55,26 +55,42 @@ export default function AddExpenses() {
             </div>
 			
             <DatePicker isRequired className="max-w-[300px] mb-8" 
-                label="Transasction Date" 
+                isDisabled={isSubmitting} 
+                label="Transasction Date"
                 onChange={handlePurchaseDateChange}
             />
             {formData.map(item => (
                 <ExpensesInputGroup key={item.id}
                     categories={spendCategories}
+                    disableFields={isSubmitting}
                     handleInputChange={handleInputChange}
-                    item={item}
-                    paymentMethods={payment}
-                    removeItem={removeItem}
+                    handlePaymentMethodChange={handlePaymentMethodChange}
                     handleSpendCategoryChange={handleSpendCategoryChange}
+                    item={item}
+                    paymentMethods={paymentMethods}
+                    removeItem={removeItem}
                 />
             ))}
-            <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
-                <Button className="mx-1" color="secondary" size="sm" startContent={<AddIcon />}
-                    onPress={addItem} 
-                    // isDisabled={purchaseDate === null}
-                >Add New Line</Button>
-                <Button className="mx-1" color="primary" size="sm" startContent={<SendIcon />} onPress={handleSubmit}>Submit Expenses</Button>
-            </div>
+            {(!didPaymentMethodsFetchFAil && !didSpendCategoriesFetchFail) && (
+                <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
+                    <Button className="mx-1" color="secondary"  isDisabled={purchaseDate === null || isSubmitting}
+                        size="sm" 
+                        startContent={<AddIcon />}
+                        onPress={addItem}
+                        
+                    >Add New Line</Button>
+                    <Button className="mx-1" color="primary"
+                        isDisabled={formData.length === 0 || purchaseDate === null || isSubmitting}
+                        isLoading={isSubmitting} 
+                        size="sm"
+                        startContent={isSubmitting ? "" : <SendIcon />}
+                        onPress={handleSubmit}
+                    >
+                        { isSubmitting ? "Processing..." : "Submit Expenses" }
+                    </Button>
+                </div>
+            )}
+            
         </DefaultLayout>
     );
 }

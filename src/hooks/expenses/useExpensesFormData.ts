@@ -1,5 +1,6 @@
 import { addToast, DateValue } from "@heroui/react";
 import { useCallback, useState } from "react";
+
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
 import { isACalendarDate } from "@/utils/date";
 
@@ -9,17 +10,20 @@ export interface CategoryDetails {
 }
 
 export default function useExpensesFormData() {
-    const [purchaseDate, setPurchaseDate] = useState<DateValue | null>(null);
+    const [purchaseDate, setPurchaseDate] = useState<string | null>(null);
     const [formData, setFormData] = useState<ExpenseItem[]>([]);
 
     const addItem = () => {
         const newItem: ExpenseItem = {
             id: crypto.randomUUID(),
-            card: null,
-            cardId: "",
             itemName: "",
             price: 0,
             purchaseDate: purchaseDate ? purchaseDate.toString() : "",
+            paymentMethodId: "",
+            paymentMethodDetails: {
+                name: "",
+                color: ""
+            },
             spendCategoryId: "",
             spendCategoryDetails: {
                 name: "",
@@ -28,6 +32,11 @@ export default function useExpensesFormData() {
         };
 
         setFormData(prev => [...prev, newItem]);
+    };
+
+    const resetFields = () => {
+        setFormData([]);
+        setPurchaseDate(null);
     };
 
     const removeItem = useCallback((id: string) => {
@@ -47,7 +56,10 @@ export default function useExpensesFormData() {
             return;
         }
 
-        setPurchaseDate(value);
+        const { year, month, day } = value;
+        const parsed = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+        setPurchaseDate(parsed);
     };
 
     const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, id: string) => {
@@ -85,6 +97,24 @@ export default function useExpensesFormData() {
         );
     }, []);
 
+    const handlePaymentMethodChange = useCallback((
+        id: string,
+        cardId: string,
+        cardDetails: { name: string, color: string }
+    ) => {
+        setFormData(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? {
+                        ...item,
+                        paymentMethodId: cardId,
+                        paymentMethodDetails: cardDetails
+                    }
+                    : item
+            )
+        );
+    }, []);
+
     return {
         formData,
         purchaseDate,
@@ -92,6 +122,8 @@ export default function useExpensesFormData() {
         removeItem,
         handlePurchaseDateChange,
         handleInputChange,
-        handleSpendCategoryChange
+        handleSpendCategoryChange,
+        handlePaymentMethodChange,
+        resetFields
     };
 }

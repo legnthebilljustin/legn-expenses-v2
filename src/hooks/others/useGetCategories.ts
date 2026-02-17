@@ -8,7 +8,8 @@ import { validateFetchedCategoriesList } from "@/validators/expenses-validators"
 export default function useGetCategories() {
     const {
         data = [],
-        isLoading
+        isLoading,
+        isError
     } = useQuery({
         queryKey: ["getCategories"],
         queryFn: async () => {
@@ -30,5 +31,6 @@ export default function useGetCategories() {
     return {
         spendCategories: data,
         isLoading,
+        didSpendCategoriesFetchFail: isError
     };
 }
