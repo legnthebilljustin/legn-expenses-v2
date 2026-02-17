@@ -37,7 +37,7 @@ export default function useExpensesFormData() {
     const resetFields = () => {
         setFormData([]);
         setPurchaseDate(null);
-    }
+    };
 
     const removeItem = useCallback((id: string) => {
         setFormData(prev => prev.filter(item => item.id !== id));
@@ -56,8 +56,8 @@ export default function useExpensesFormData() {
             return;
         }
 
-        const { year, month, day } = value
-        const parsed = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const { year, month, day } = value;
+        const parsed = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
         setPurchaseDate(parsed);
     };

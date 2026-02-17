@@ -1,9 +1,10 @@
-import api from "@/config/axiosInstance";
-import { ExpenseItem } from "@/schemas/ExpenseSchema";
-import { AppErrorHandler } from "@/utils/errorService";
 import { addToast } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+
+import api from "@/config/axiosInstance";
+import { ExpenseItem } from "@/schemas/ExpenseSchema";
+import { AppErrorHandler } from "@/utils/errorService";
 
 export default function useFormSubmit() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,9 +22,9 @@ export default function useFormSubmit() {
                 title: "Expenses submitted successfully!",
                 color: "success",
                 timeout: 3000
-            })
+            });
 
-            return true
+            return true;
         } catch (error) {
             const { message } = AppErrorHandler(error);
 
@@ -34,7 +35,7 @@ export default function useFormSubmit() {
                 timeout: 5000
             });
 
-            throw error
+            throw error;
         } finally {
             setIsSubmitting(false);
         }
@@ -42,9 +43,9 @@ export default function useFormSubmit() {
 
     const mutation = useMutation({
         mutationFn: async({ expenses, purchaseDate }: { expenses: ExpenseItem[], purchaseDate: string}) => {
-            return await api.post("/v1/expenses", { purchaseDate, expenses})
+            return await api.post("/v1/expenses", { purchaseDate, expenses});
         }
-    })
+    });
 
     return {
         submitForm,

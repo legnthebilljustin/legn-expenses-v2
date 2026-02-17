@@ -55,36 +55,36 @@ export default function AddExpenses() {
             </div>
 			
             <DatePicker isRequired className="max-w-[300px] mb-8" 
-                label="Transasction Date" 
+                isDisabled={isSubmitting} 
+                label="Transasction Date"
                 onChange={handlePurchaseDateChange}
-                isDisabled={isSubmitting}
             />
             {formData.map(item => (
                 <ExpensesInputGroup key={item.id}
                     categories={spendCategories}
+                    disableFields={isSubmitting}
                     handleInputChange={handleInputChange}
                     handlePaymentMethodChange={handlePaymentMethodChange}
                     handleSpendCategoryChange={handleSpendCategoryChange}
                     item={item}
                     paymentMethods={paymentMethods}
                     removeItem={removeItem}
-                    disableFields={isSubmitting}
                 />
             ))}
             {(!didPaymentMethodsFetchFAil && !didSpendCategoriesFetchFail) && (
                 <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
-                    <Button className="mx-1" color="secondary"  size="sm"
-                        startContent={<AddIcon />} 
+                    <Button className="mx-1" color="secondary"  isDisabled={purchaseDate === null || isSubmitting}
+                        size="sm" 
+                        startContent={<AddIcon />}
                         onPress={addItem}
-                        isDisabled={purchaseDate === null || isSubmitting}
                         
                     >Add New Line</Button>
                     <Button className="mx-1" color="primary"
-                        size="sm"
-                        startContent={isSubmitting ? "" : <SendIcon />} 
-                        onPress={handleSubmit}
                         isDisabled={formData.length === 0 || purchaseDate === null || isSubmitting}
-                        isLoading={isSubmitting}
+                        isLoading={isSubmitting} 
+                        size="sm"
+                        startContent={isSubmitting ? "" : <SendIcon />}
+                        onPress={handleSubmit}
                     >
                         { isSubmitting ? "Processing..." : "Submit Expenses" }
                     </Button>

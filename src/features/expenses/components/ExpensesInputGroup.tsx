@@ -54,14 +54,15 @@ function ExpensesInputGroup({
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-[1400px] mt-3">
-            <Input isRequired className="lg:col-span-2" label="Name"
+            <Input isRequired className="lg:col-span-2" isDisabled={disableFields}
+                label="Name"
                 name="itemName"
                 placeholder="Item/Merchant Name"
                 value={item.itemName}
                 onChange={(e) => handleInputChange(e, referenceId)}
-                isDisabled={disableFields}
             />
             <Input isRequired
+                isDisabled={disableFields}
                 label="Price"
                 name="price"
                 placeholder="0.00"
@@ -73,12 +74,11 @@ function ExpensesInputGroup({
                 type="number"
                 value={item.price.toString()}
                 onChange={(e) => handleInputChange(e, referenceId)}
-                isDisabled={disableFields}
             />
-            <Select isRequired label="Category" placeholder="Select category"
+            <Select isRequired isDisabled={disableFields} label="Category"
+                placeholder="Select category"
                 selectionMode="single"
                 onChange={(event) => handleCategoryChange(event)}
-                isDisabled={disableFields}
             >
                 {categories.map((category) => (
                     <SelectItem key={category.id} 
@@ -88,20 +88,20 @@ function ExpensesInputGroup({
                     </SelectItem>
                 ))}
             </Select>
-            <Select isRequired label="Payment Method"
-                placeholder="Select payment" selectionMode="single"
+            <Select isRequired isDisabled={disableFields}
+                label="Payment Method" placeholder="Select payment"
+                selectionMode="single"
                 onChange={(event) => handlePMChange(event)}
-                isDisabled={disableFields}
             >
                 {paymentMethods.map((item) => (
                     <SelectItem key={item.id} textValue={item.name}>{item.name}</SelectItem>
                 ))}
             </Select>
             <div className="text-center col-span-2 md:col-span-1 md:text-left">
-                <Button isIconOnly color="danger" size="lg" 
-                    startContent={<DeleteIcon />} variant="light" 
+                <Button isIconOnly color="danger" isDisabled={disableFields} 
+                    size="lg" startContent={<DeleteIcon />} 
+                    variant="light" 
                     onPress={handleRemove} 
-                    isDisabled={disableFields} 
                 />
             </div>
         </div>
