@@ -2,14 +2,11 @@ import * as z from "zod";
 
 export const ExpenseItemSchema = z.object({
     id: z.string(),
-    card: z.union([
-        z.null(),
-        z.object({
-            color: z.string(),
-            name: z.string()
-        })
-    ]),
-    cardId: z.string(),
+    paymentMethodId: z.string(),
+    paymentMethodDetails: z.object({
+        name: z.string(),
+        color: z.string()
+    }),
     itemName: z.string(),
     price: z.number(),
     purchaseDate: z.string(),

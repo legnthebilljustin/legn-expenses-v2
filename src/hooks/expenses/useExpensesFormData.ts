@@ -10,17 +10,20 @@ export interface CategoryDetails {
 }
 
 export default function useExpensesFormData() {
-    const [purchaseDate, setPurchaseDate] = useState<DateValue | null>(null);
+    const [purchaseDate, setPurchaseDate] = useState<string | null>(null);
     const [formData, setFormData] = useState<ExpenseItem[]>([]);
 
     const addItem = () => {
         const newItem: ExpenseItem = {
             id: crypto.randomUUID(),
-            card: null,
-            cardId: "",
             itemName: "",
             price: 0,
             purchaseDate: purchaseDate ? purchaseDate.toString() : "",
+            paymentMethodId: "",
+            paymentMethodDetails: {
+                name: "",
+                color: ""
+            },
             spendCategoryId: "",
             spendCategoryDetails: {
                 name: "",
@@ -30,6 +33,11 @@ export default function useExpensesFormData() {
 
         setFormData(prev => [...prev, newItem]);
     };
+
+    const resetFields = () => {
+        setFormData([]);
+        setPurchaseDate(null);
+    }
 
     const removeItem = useCallback((id: string) => {
         setFormData(prev => prev.filter(item => item.id !== id));
@@ -48,7 +56,10 @@ export default function useExpensesFormData() {
             return;
         }
 
-        setPurchaseDate(value);
+        const { year, month, day } = value
+        const parsed = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        setPurchaseDate(parsed);
     };
 
     const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, id: string) => {
@@ -112,6 +123,7 @@ export default function useExpensesFormData() {
         handlePurchaseDateChange,
         handleInputChange,
         handleSpendCategoryChange,
-        handlePaymentMethodChange
+        handlePaymentMethodChange,
+        resetFields
     };
 }

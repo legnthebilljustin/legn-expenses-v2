@@ -19,15 +19,20 @@ export default function AddExpenses() {
         handlePurchaseDateChange,
         handleInputChange,
         handleSpendCategoryChange,
-        handlePaymentMethodChange
+        handlePaymentMethodChange,
+        resetFields
     } = useExpensesFormData();
 
-    const { submitForm } = useFormSubmit();
+    const { submitForm, isSubmitting } = useFormSubmit();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (purchaseDate === null) return;
 
-        submitForm(purchaseDate, formData);
+        const result = await submitForm(purchaseDate, formData);
+
+        if (result) {
+            resetFields();
+        }
     };
 
     if (isLoading || isPaymentMethodsLoading) {
@@ -52,6 +57,7 @@ export default function AddExpenses() {
             <DatePicker isRequired className="max-w-[300px] mb-8" 
                 label="Transasction Date" 
                 onChange={handlePurchaseDateChange}
+                isDisabled={isSubmitting}
             />
             {formData.map(item => (
                 <ExpensesInputGroup key={item.id}
@@ -62,19 +68,26 @@ export default function AddExpenses() {
                     item={item}
                     paymentMethods={paymentMethods}
                     removeItem={removeItem}
+                    disableFields={isSubmitting}
                 />
             ))}
             {(!didPaymentMethodsFetchFAil && !didSpendCategoriesFetchFail) && (
                 <div className="mt-8 mb-4 flex items-center justify-center max-w-[1400px]">
-                    <Button className="mx-1" color="secondary" isDisabled={purchaseDate === null} size="sm"
+                    <Button className="mx-1" color="secondary"  size="sm"
                         startContent={<AddIcon />} 
                         onPress={addItem}
+                        isDisabled={purchaseDate === null || isSubmitting}
+                        
                     >Add New Line</Button>
-                    <Button className="mx-1" color="primary" isDisabled={purchaseDate === null}
+                    <Button className="mx-1" color="primary"
                         size="sm"
-                        startContent={<SendIcon />} 
+                        startContent={isSubmitting ? "" : <SendIcon />} 
                         onPress={handleSubmit}
-                    >Submit Expenses</Button>
+                        isDisabled={formData.length === 0 || purchaseDate === null || isSubmitting}
+                        isLoading={isSubmitting}
+                    >
+                        { isSubmitting ? "Processing..." : "Submit Expenses" }
+                    </Button>
                 </div>
             )}
             

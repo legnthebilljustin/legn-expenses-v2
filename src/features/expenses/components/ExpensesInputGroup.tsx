@@ -11,6 +11,7 @@ interface Props {
     paymentMethods: { id: string, name: string, color: string }[]
     categories: SpendCategory[]
     item: ExpenseItem
+    disableFields?: boolean
     removeItem: (itemId: string) => void
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void
     handleSpendCategoryChange: (itemId: string, categoryId: string, details: CategoryDetails) => void
@@ -18,7 +19,7 @@ interface Props {
 }
 
 function ExpensesInputGroup({ 
-    categories, paymentMethods, item, removeItem, handleInputChange,
+    categories, paymentMethods, item, disableFields, removeItem, handleInputChange,
     handleSpendCategoryChange, handlePaymentMethodChange
 }: Props) {
     const referenceId = item.id;
@@ -58,6 +59,7 @@ function ExpensesInputGroup({
                 placeholder="Item/Merchant Name"
                 value={item.itemName}
                 onChange={(e) => handleInputChange(e, referenceId)}
+                isDisabled={disableFields}
             />
             <Input isRequired
                 label="Price"
@@ -71,10 +73,12 @@ function ExpensesInputGroup({
                 type="number"
                 value={item.price.toString()}
                 onChange={(e) => handleInputChange(e, referenceId)}
+                isDisabled={disableFields}
             />
             <Select isRequired label="Category" placeholder="Select category"
                 selectionMode="single"
                 onChange={(event) => handleCategoryChange(event)}
+                isDisabled={disableFields}
             >
                 {categories.map((category) => (
                     <SelectItem key={category.id} 
@@ -87,13 +91,18 @@ function ExpensesInputGroup({
             <Select isRequired label="Payment Method"
                 placeholder="Select payment" selectionMode="single"
                 onChange={(event) => handlePMChange(event)}
+                isDisabled={disableFields}
             >
                 {paymentMethods.map((item) => (
                     <SelectItem key={item.id} textValue={item.name}>{item.name}</SelectItem>
                 ))}
             </Select>
             <div className="text-center col-span-2 md:col-span-1 md:text-left">
-                <Button isIconOnly color="danger" size="lg" startContent={<DeleteIcon />} variant="light" onPress={handleRemove} />
+                <Button isIconOnly color="danger" size="lg" 
+                    startContent={<DeleteIcon />} variant="light" 
+                    onPress={handleRemove} 
+                    isDisabled={disableFields} 
+                />
             </div>
         </div>
     );
