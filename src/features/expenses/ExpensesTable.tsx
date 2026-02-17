@@ -1,14 +1,14 @@
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 
 import { DeleteIcon, EditIcon } from "@/assets/icons";
 import { convertToCurrency } from "@/utils/currency";
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
 
 export const columns = [
-    {name: "ITEM", uid: "item", width: "40%"},
-    {name: "PAYMENT", uid: "payment", width: "20%"},
-    {name: "CATEGORY", uid: "category", width: "10%"},
-    {name: "AMOUNT", uid: "amount", width: "15%"},
+    {name: "ITEM", uid: "item", width: "35%"},
+    {name: "PAYMENT", uid: "payment", width: "15%"},
+    {name: "CATEGORY", uid: "category", width: "15%"},
+    {name: "AMOUNT", uid: "amount", width: "12%"},
     {name: "ACTIONS", uid: "actions", width: "10%"},
 ];
 
@@ -18,6 +18,12 @@ interface Props {
 }
 
 export default function ExpensesTable({ purchaseDate, expenses }: Props) {
+    const hexToRGBA = (hex: string) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, 0.2)`;
+    };
     return (
         <>
             <div className="text-sm font-bold tracking-tight mb-2 mt-4 text-slate-400">{purchaseDate}</div>
@@ -35,8 +41,29 @@ export default function ExpensesTable({ purchaseDate, expenses }: Props) {
                     {(item) => (
                         <TableRow key={item.id}>
                             <TableCell>{item.itemName}</TableCell>
-                            <TableCell>Card</TableCell>
-                            <TableCell>Category</TableCell>
+                            <TableCell>
+                                <Chip className="truncate" radius="lg"
+                                    size="sm"
+                                    style={{
+                                        backgroundColor: hexToRGBA(item.paymentMethodDetails.color),
+                                        color: item.paymentMethodDetails.color,
+                                    }}
+                                >
+                                    <div className="w-[120px] truncate">
+                                        { item.paymentMethodDetails.name }
+                                    </div>
+                                </Chip>
+                            </TableCell>
+                            <TableCell>
+                                <Chip radius="lg" size="sm"
+                                    style={{
+                                        color: item.spendCategoryDetails.color
+                                    }}
+                                    variant="light"
+                                >
+                                    {item.spendCategoryDetails.name}
+                                </Chip>
+                            </TableCell>
                             <TableCell className="text-end">
                                 <div className="font-thin">{convertToCurrency(item.price)}</div>
                             </TableCell>
