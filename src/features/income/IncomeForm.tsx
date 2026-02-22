@@ -17,31 +17,31 @@ export default function IncomeForm() {
         <div className="max-w-[800px] mx-auto">
             <Form onSubmit={handleSubmit}>
                 <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3">
-                    <DatePicker className="max-w-[300px]" label="Received Date"
-                        size="sm" isRequired onChange={handleDateChange}
-                        isDisabled={isSubmitting}
+                    <DatePicker isRequired className="max-w-[300px]"
+                        isDisabled={isSubmitting} label="Received Date" size="sm"
+                        onChange={handleDateChange}
                     />
-                    <Input className="max-w-[300px]" label="Source" 
-                        placeholder="Source of funds" name="source"
-                        size="sm" isRequired
+                    <Input isRequired className="max-w-[300px]" 
+                        isDisabled={isSubmitting} label="Source"
+                        name="source" placeholder="Source of funds"
+                        size="sm"
                         value={formData.source}
                         onChange={handleInputChange}
-                        isDisabled={isSubmitting}
                     />
-                    <Input className="max-w-[300px]" label="Amount" placeholder="0" 
-                        size="sm" type="number" isRequired name="amount"
+                    <Input isRequired className="max-w-[300px]" isDisabled={isSubmitting} 
+                        label="Amount" name="amount" placeholder="0" size="sm"
+                        type="number"
                         value={formData.amount.toString()}
                         onChange={handleInputChange}
-                        isDisabled={isSubmitting}
                     />
                     
                 </div>
                 <div className="text-center w-full">
                     <Button className="px-3 mt-3 max-w-[150px]" 
-                        color="success" type="submit"
-                        size="sm" startContent={<SendIcon />}
-                        variant="flat" disabled={isSubmitting}
-                        isLoading={isSubmitting}
+                        color="success" disabled={isSubmitting}
+                        isLoading={isSubmitting} size="sm"
+                        startContent={<SendIcon />} type="submit"
+                        variant="flat"
                     >Add Income
                     </Button>
                 </div>

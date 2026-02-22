@@ -1,20 +1,23 @@
-import api from "@/config/axiosInstance";
-import { AppErrorHandler } from "@/utils/errorService";
 import { addToast, DateValue } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+
+import api from "@/config/axiosInstance";
+import queryClient from "@/config/queryClient";
+import { QUERIES } from "@/constants/enums";
+import { AppErrorHandler } from "@/utils/errorService";
 export default function useAddIncome() {
     const [formData, setFormData] = useState({
         receivedDate: "",
         source: "",
         amount: 0
-    })
+    });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: name === "amount" ? parseFloat(value) || 0 : value }));
-    }
+    };
 
     const handleDateChange = (date: DateValue | null) => {
         if (date === null) return;
@@ -23,11 +26,11 @@ export default function useAddIncome() {
         const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
         setFormData(prev => ({ ...prev, receivedDate: formattedDate }));
-    }
+    };
 
     const handleSubmit = async(event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formData)
+
         if (!formData.receivedDate || !formData.source) {
             addToast({
                 title: "Please fill in all required fields.",
@@ -54,16 +57,12 @@ export default function useAddIncome() {
                 receivedDate: "",
                 source: "",
                 amount: 0
-            })
-            return addToast({
-                title: "Income added successfully!",
-                color: "success",
-                timeout: 3000
             });
+            return; 
         } catch (error) {
-            const { message } = AppErrorHandler(error)
+            const { message } = AppErrorHandler(error);
 
-            return addToast({
+            addToast({
                 title: "Failed to submit income.",
                 description: message,
                 color: "danger",
@@ -72,13 +71,22 @@ export default function useAddIncome() {
         } finally {
             setIsSubmitting(false);
         }
-    }
+    };
 
     const mutation = useMutation({
         mutationFn: async(data: typeof formData) => {
             return await api.post("/v1/income", data);
-        }
-    })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [QUERIES.GET_INCOME] });
+
+            addToast({
+                title: "Income added successfully!",
+                color: "success",
+                timeout: 3000
+            });
+        },
+    });
 
     return {
         formData,
@@ -86,5 +94,5 @@ export default function useAddIncome() {
         handleDateChange,
         isSubmitting,
         handleSubmit
-    }
+    };
 }
