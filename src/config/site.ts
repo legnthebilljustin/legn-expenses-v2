@@ -1,5 +1,5 @@
 export type SiteConfig = typeof siteConfig;
-import { ClipboardIcon, CreditCardIcon, DashboardIcon, HomeIcon } from "@/assets/icons";
+import { ClipboardIcon, CreditCardIcon, DashboardIcon, HomeIcon, PiggyBankIcon } from "@/assets/icons";
 export const siteConfig = {
     name: "Legn",
     navItems: [
@@ -23,6 +23,11 @@ export const siteConfig = {
             href: "/cards",
             icon: CreditCardIcon
         },
+        {
+            label: "Income",
+            href: "/income",
+            icon: PiggyBankIcon
+        }
     ],
     navMenuItems: [
         {

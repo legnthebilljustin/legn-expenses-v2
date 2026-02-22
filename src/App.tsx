@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import queryClient from "./config/queryClient";
+import Income from "./pages/Income";
 
 import IndexPage from "@/pages/index";
 import Dashboard from "@/pages/Dashboard";
@@ -23,6 +24,10 @@ const protectedAppRoutes = [
     {
         path: "/add-expenses",
         component: <AddExpenses />
+    },
+    {
+        path: "/income",
+        component: <Income />
     }
 ];
 
