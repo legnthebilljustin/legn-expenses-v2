@@ -1,54 +1,40 @@
-import { cn, Listbox, ListboxItem } from "@heroui/react";
+import { Button, Skeleton } from "@heroui/react";
 
-import { ClothingIcon, ElectronicsIcon, FoodIcon, TravelIcon, UtilityIcon } from "@/assets/expenses-icons";
-import CurrencyText from "@/components/CurrencyText";
+import { ClothingIcon } from "@/assets/expenses-icons";
+import { convertToCurrency } from "@/utils/currency";
+import SubtitleText from "@/components/SubtitleText";
+import { SpendCategoryStat } from "@/schemas/CategoriesSchema";
 
-const categories = [
-    { name: "Clothing", transactions: 82, amount: 21342.23, icon: <ClothingIcon />, color: "#6366F1" },
-    { name: "Travel", transactions: 82, amount: 21342.23, icon: <TravelIcon />, color: "#22C55E" },
-    { name: "Electronics", transactions: 82, amount: 21342.23, icon: <ElectronicsIcon />, color: "#A855F7" },
-    { name: "Food", transactions: 82, amount: 21342.23, icon: <FoodIcon />, color: "#64748B" },
-    { name: "Utilities", transactions: 82, amount: 21342.23, icon: <UtilityIcon />, color: "#d2d537ff" },
-];
-
-export default function CategoryList() {
-    return (
-        <Listbox
-            aria-label="User Menu"
-            className="p-0 gap-0 divide-y divide-default-300/50 border-none pointer-events-none py-4"
-            selectionMode="none"
-        >
-            {categories.map((item, index) => (
-                <ListboxItem key={index} showDivider
-                    className="mt-2"
-                    description={<CurrencyText amount={item.amount} />}
-                    endContent={<ItemCounter number={item.transactions} />}
-                    startContent={
-                        <div className="flex items-center rounded-small justify-center w-10 h-10"
-                            style={{
-                                backgroundColor: `${item.color}1A`, // ~10% opacity
-                                color: item.color,
-                            }}
-                        >
-                            {item.icon}
-                        </div>
-                    }
-                >
-                    { item.name }
-                </ListboxItem>
-            ))}
-        </Listbox>
-    );
+interface Props {
+    isLoaded: boolean;
+    categories: SpendCategoryStat[];
 }
 
-export const IconWrapper = ({children, className}: { children: any, className: string }) => (
-    <div className={cn(className, "flex items-center rounded-small justify-center w-10 h-10")}>
-        {children}
-    </div>
-);
-
-export const ItemCounter = ({number}: { number: number }) => (
-    <div className="flex items-center gap-1 text-default-600 font-medium">
-        <span className="text-small">{number}</span>
-    </div>
-);
+export default function CategoryList({ isLoaded, categories }: Props) {
+    return (
+        <div className="grid grid-cols-1 gap-1 mb-6 md:grid-cols-5">
+            {categories.map((item: SpendCategoryStat) => (
+                <div key={item.id} className="flex justify-between items-center px-2 py-2 bg-gray-200/50 dark:bg-gray-700/40 rounded-md">
+                    <div className="flex flex-start items-center gap-2 radius-large">
+                        <Skeleton className="rounded-full w-8 h-8" isLoaded={isLoaded}>
+                            <Button isIconOnly color="primary" radius="sm" size="sm" variant="flat">
+                                <span className="text-xs"><ClothingIcon /></span>
+                            </Button>
+                        </Skeleton>
+                        <div>
+                            <Skeleton className="rounded" isLoaded={isLoaded}>
+                                <div className="text-slate-500 font-bold text-small"
+                                    style={{ color: item?.color }}
+                                >{ item?.name }</div>
+                                <SubtitleText text={`${item.totalTransactions} transactions`} />
+                            </Skeleton>
+                        </div>
+                    </div>
+                    <Skeleton className="w-20 h-4 rounded" isLoaded={isLoaded}>
+                        <div className="text-sm font-normal">{ convertToCurrency(item.totalSpent) }</div>
+                    </Skeleton>
+                </div>
+            ))}
+        </div>
+    );
+}

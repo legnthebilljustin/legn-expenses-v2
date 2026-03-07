@@ -8,8 +8,15 @@ import { convertToCurrency } from "@/utils/currency";
 import HeadingText from "@/components/HeadingText";
 import RecentExpensesTable from "@/features/dashboard/RecentExpensesTable";
 import CurrentBalance from "@/features/dashboard/CurrentBalance";
+import useFetchCategoryStats from "@/hooks/dashboard/useFetchCategoryStats";
 
 export default function Dashboard() {
+    const { 
+        data: categoryStats, 
+        isLoading: isCategoryStatsLoading,
+        totalSpent
+    } = useFetchCategoryStats();
+
     return (
         <DefaultLayout>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -17,7 +24,10 @@ export default function Dashboard() {
                     <h1 className="text-3xl font-bold mb-2">Hello, Bill</h1>
                     <SubtitleText text="Take a look at your current month's balance." />
                     <CurrentBalance />
-                    <SpendCategoryCard />
+                    <SpendCategoryCard categoryStats={categoryStats}
+                        isLoading={isCategoryStatsLoading}
+                        totalSpent={totalSpent}
+                    />
                 </div>
                 <div className="lg:col-span-2">
                     <HeadingText text="Your Total Metrics" />

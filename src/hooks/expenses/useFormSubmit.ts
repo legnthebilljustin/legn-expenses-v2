@@ -5,6 +5,8 @@ import { useState } from "react";
 import api from "@/config/axiosInstance";
 import { ExpenseItem } from "@/schemas/ExpenseSchema";
 import { AppErrorHandler } from "@/utils/errorService";
+import queryClient from "@/config/queryClient";
+import { QUERIES } from "@/constants/enums";
 
 export default function useFormSubmit() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,6 +46,10 @@ export default function useFormSubmit() {
     const mutation = useMutation({
         mutationFn: async({ expenses, purchaseDate }: { expenses: ExpenseItem[], purchaseDate: string}) => {
             return await api.post("/v1/expenses", { purchaseDate, expenses});
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [QUERIES.GET_EXPENSES]});
+            queryClient.invalidateQueries({ queryKey: [QUERIES.GET_CATEGORY_STATS]});
         }
     });
 
