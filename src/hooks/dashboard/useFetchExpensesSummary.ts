@@ -30,11 +30,11 @@ export default function useFetchExpensesSummary() {
             return validated.data;
         },
         select: (data) => {
-            const totalAmount = data?.totalAmount ?? 0;
-            const totalTransactions: number = data?.totalTransactions ?? 0;
+            const totalAmount = data.totalAmount;
+            const totalTransactions: number = data.totalTransactions;
 
             return {
-                list: data?.list || [],
+                list: data,
                 totalAmount,
                 totalTransactions
             };
@@ -42,9 +42,9 @@ export default function useFetchExpensesSummary() {
     });
 
     return {
-        expensesSummaryList: data!.list,
-        totalAmount: data!.totalAmount,
-        totalTransactions: data!.totalTransactions,
+        expensesSummaryList: data?.list ?? [],
+        totalAmount: data?.totalAmount ?? 0,
+        totalTransactions: data?.totalTransactions ?? 0,
         isLoading: isPending || isFetching
     };
 }
