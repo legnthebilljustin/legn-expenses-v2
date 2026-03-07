@@ -9,7 +9,8 @@ import { CategoryStatsSchema } from "@/schemas/CategoriesSchema";
 export default function useFetchCategoryStats() {
     const {
         data,
-        isPending
+        isPending,
+        isFetching
     } = useQuery({
         staleTime: 5 * 60 * 1000, // 5 minutes
         gcTime: 30 * 60 * 1000, // 30 minutes,
@@ -63,6 +64,6 @@ export default function useFetchCategoryStats() {
         data: data?.categories ?? [],
         totalSpent: data?.totalSpent ?? 0,
         totalTransactions: data?.totalTransactions ?? 0,
-        isLoading: isPending
+        isLoading: isPending || isFetching
     };
 }
