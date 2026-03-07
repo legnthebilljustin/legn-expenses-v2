@@ -12,7 +12,7 @@ interface Props {
 
 export default function CategoryList({ isLoaded, categories }: Props) {
     return (
-        <div className="grid grid-cols-1 gap-1 mb-6 md:grid-cols-5">
+        <div className="grid grid-cols-1 gap-1 mb-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {categories.map((item: SpendCategoryStat) => (
                 <div key={item.id} className="flex justify-between items-center px-2 py-2 bg-gray-200/50 dark:bg-gray-700/40 rounded-md">
                     <div className="flex flex-start items-center gap-2 radius-large">
@@ -23,7 +23,7 @@ export default function CategoryList({ isLoaded, categories }: Props) {
                         </Skeleton>
                         <div>
                             <Skeleton className="rounded" isLoaded={isLoaded}>
-                                <div className="text-slate-500 font-bold text-small"
+                                <div className="text-slate-500 font-bold text-small truncate"
                                     style={{ color: item?.color }}
                                 >{ item?.name }</div>
                                 <SubtitleText text={`${item.totalTransactions} transactions`} />
@@ -35,6 +35,7 @@ export default function CategoryList({ isLoaded, categories }: Props) {
                     </Skeleton>
                 </div>
             ))}
+            
         </div>
     );
 }
