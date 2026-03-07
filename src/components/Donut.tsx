@@ -67,7 +67,7 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
                                 r={radius}
                                 stroke={segment.color}
                                 strokeDasharray={dashArray}
-                                strokeDashoffset={dashOffset}
+                                strokeDashoffset={dashOffset.toString()}
                                 strokeLinecap="round"
                                 strokeWidth={strokeWidth}
                                 style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
