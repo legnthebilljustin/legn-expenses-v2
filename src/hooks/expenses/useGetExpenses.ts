@@ -4,6 +4,7 @@ import { useState } from "react";
 import api from "@/config/axiosInstance";
 import AppError from "@/utils/errorService";
 import { validateFetchedExpensesList } from "@/validators/expenses-validators";
+import { QUERIES } from "@/constants/enums";
 
 export default function useGetExpenses() {
     const [paginationKey, setPaginationKey] = useState<string | null>(null);
@@ -14,7 +15,7 @@ export default function useGetExpenses() {
         isPending,
         refetch
     } = useQuery({
-        queryKey: ["expenses", paginationKey],
+        queryKey: [QUERIES.GET_EXPENSES, paginationKey],
         queryFn: async () => {
             const response = await api.get("/v1/expenses?paginationKey=null");
 

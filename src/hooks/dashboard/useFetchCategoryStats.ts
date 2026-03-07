@@ -1,5 +1,5 @@
 import { addToast } from "@heroui/react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
 import api from "@/config/axiosInstance";
@@ -11,23 +11,36 @@ export default function useFetchCategoryStats() {
         data,
         isPending
     } = useQuery({
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        gcTime: 30 * 60 * 1000, // 30 minutes,
+        refetchOnWindowFocus: false,
+        placeholderData: keepPreviousData,
         queryKey: [QUERIES.GET_CATEGORY_STATS],
         queryFn: async () => {
-            const { data } = await api.get("/v1/spend-categories/category-stats");
+            try {
+                const { data } = await api.get("/v1/spend-categories/category-stats");
         
-            const result = z.array(CategoryStatsSchema).safeParse(data.stats);
+                const result = z.array(CategoryStatsSchema).safeParse(data.stats);
 
-            if (!result.success) {
+                if (!result.success) {
+                    addToast({
+                        title: "Unable to display spend category stats.",
+                        description: "Received data is in an unexpected format.",
+                        color: "danger"
+                    });
+
+                    return [];
+                }
+
+                return result.data;
+            } catch (error) {
                 addToast({
-                    title: "Unable to display spend category stats.",
-                    description: "Received data is in an unexpected format.",
+                    title: "Failed to fetch category stats.",
+                    description: "An error occurred while fetching category statistics.",
                     color: "danger"
                 });
-
-                return [];
+                throw error;
             }
-
-            return result.data;
         },
         select: (data) => {
             const totalSpent = data.reduce(
