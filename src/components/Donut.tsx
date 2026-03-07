@@ -2,8 +2,6 @@ import { useState } from "react";
 
 import SubtitleText from "./SubtitleText";
 
-import { DonutSegment } from "@/types";
-
 type TooltipState = {
     x: number;
     y: number;
@@ -12,7 +10,7 @@ type TooltipState = {
 };
 
 interface Props {
-    data: DonutSegment[]
+    data: any[]
     subtitle: string
     showCenterText?: boolean
     centerTextData?: string | number
@@ -27,7 +25,7 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
 
-    const total = data.reduce((sum, d) => sum + d.value, 0);
+    const total = data.reduce((sum, d) => sum + d.totalSpent, 0);
     let cumulativeValue = 0;
 	
     if (!Array.isArray(data)) {
@@ -52,13 +50,13 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
                         const fraction =
                             index === data.length - 1
                                 ? (total - cumulativeValue) / total
-                                : segment.value / total;
+                                : segment.totalSpent / total;
 
                         const segmentLength = fraction * circumference;
                         const dashArray = `${segmentLength} ${circumference - segmentLength}`;
                         const dashOffset = circumference - (cumulativeValue / total) * circumference;
 
-                        cumulativeValue += segment.value;
+                        cumulativeValue += segment.totalSpent;
 
                         return (
                             <circle
@@ -83,8 +81,8 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
                                     setTooltip({
                                         x: e.clientX,
                                         y: e.clientY,
-                                        label: segment.label,
-                                        value: segment.value,
+                                        label: segment.name,
+                                        value: segment.totalSpent,
                                     })
                                 }
                             />
@@ -101,10 +99,10 @@ export default function CustomDonut({ data, subtitle, centerTextData, showCenter
             { showLegend && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-6 mt-4 justify-center w-full">
                     {data.map((item) => (
-                        <div key={item.label} className="flex items-center space-x-2">
+                        <div key={item.name} className="flex items-center space-x-2">
                             <div className={"w-1 h-2 rounded-full"} style={{ backgroundColor: item.color }} />
                             <span className="text-xs whitespace-nowrap tracking-tight">
-                                {item.label}
+                                {item.name}
                             </span>
                         </div>
                     ))}
