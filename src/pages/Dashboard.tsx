@@ -9,13 +9,26 @@ import HeadingText from "@/components/HeadingText";
 import RecentExpensesTable from "@/features/dashboard/RecentExpensesTable";
 import CurrentBalance from "@/features/dashboard/CurrentBalance";
 import useFetchCategoryStats from "@/hooks/dashboard/useFetchCategoryStats";
+import useGetIncome from "@/hooks/income/useGetIncome";
+import useFetchExpensesSummary from "@/hooks/dashboard/useFetchExpensesSummary";
 
 export default function Dashboard() {
+    const {
+        totalIncome,
+        isLoading: isFetchingIncome
+    } = useGetIncome();
+
     const { 
         data: categoryStats, 
         isLoading: isCategoryStatsLoading,
         totalSpent
     } = useFetchCategoryStats();
+
+    const {
+        isLoading: isFetchingExpensesSummary,
+        totalAmount,
+        totalTransactions
+    } = useFetchExpensesSummary();
 
     return (
         <DefaultLayout>
@@ -23,7 +36,10 @@ export default function Dashboard() {
                 <div className="">
                     <h1 className="text-3xl font-bold mb-2">Hello, Bill</h1>
                     <SubtitleText text="Take a look at your current month's balance." />
-                    <CurrentBalance />
+                    <CurrentBalance isLoading={isFetchingIncome} 
+                        totalExpenses={totalSpent} 
+                        totalIncome={totalIncome}
+                    />
                     <SpendCategoryCard categoryStats={categoryStats}
                         isLoading={isCategoryStatsLoading}
                         totalSpent={totalSpent}
@@ -32,9 +48,18 @@ export default function Dashboard() {
                 <div className="lg:col-span-2">
                     <HeadingText text="Your Total Metrics" />
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 mb-4">
-                        <MetricsCard icon={BarChartIcon} label="Total Income" value={convertToCurrency(123456.78)} />
-                        <MetricsCard icon={ReceiptIcon} label="Total Expenses" value={convertToCurrency(45678.90)} />
-                        <MetricsCard icon={WalletIcon} label="Total Tranasctions" value="234" />
+                        <MetricsCard icon={BarChartIcon} isLoading={isFetchingIncome}
+                            label="Total Income"
+                            value={convertToCurrency(totalIncome)} 
+                        />
+                        <MetricsCard icon={ReceiptIcon} isLoading={isFetchingExpensesSummary}
+                            label="Total Expenses"
+                            value={convertToCurrency(totalAmount)} 
+                        />
+                        <MetricsCard icon={WalletIcon} isLoading={isFetchingExpensesSummary} 
+                            label="Total Tranasctions"
+                            value={totalTransactions}
+                        />
                         <MetricsCard icon={CreditCardIcon} label="Active Credit Cards" value="5" />
                     </div>
                     <HeadingText text="Your Current Budgets" />
