@@ -52,6 +52,5 @@ export default function useGetIncome() {
         incomeRecords: data?.incomeRecords || [],
         totalIncome: data?.totalIncome || 0,
         isLoading: isPending || isFetching
-        
     };
 }

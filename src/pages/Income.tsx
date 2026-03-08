@@ -7,7 +7,7 @@ import useGetIncome from "@/hooks/income/useGetIncome";
 
 export default function Income() {
     const {
-        data,
+        incomeRecords,
         isLoading
     } = useGetIncome();
 
@@ -22,7 +22,7 @@ export default function Income() {
                         <Spinner label="Fetching your income records..." />
                     </div>
                 ) : (
-                    <IncomeList incomeData={data || []} />
+                    <IncomeList incomeData={incomeRecords || []} />
                 )}
             </div>
         </DefaultLayout>

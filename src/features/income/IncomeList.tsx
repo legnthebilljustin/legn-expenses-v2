@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 import { Income } from "@/schemas/IncomeSchema";
 import { convertToCurrency } from "@/utils/currency";
 
-export default function IncomeList({ incomeData }: { incomeData: any[] }) {
+export default function IncomeList({ incomeData }: { incomeData: Income[] }) {
     return (
         <div className="text-center mt-12">
             <h2 className="text-xl font-bold">Your Income Transactions</h2>
